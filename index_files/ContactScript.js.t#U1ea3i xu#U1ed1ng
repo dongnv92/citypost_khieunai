@@ -1,0 +1,61 @@
+﻿$(document).ready(function () {
+    $(".btn-contact ").on("click", function (event) {
+
+        event.preventDefault();
+        var Cont = new Object();
+        Cont.name = $(".name").val();
+        Cont.address = $(".address").val();
+        Cont.phone = $(".phone").val();
+        Cont.company = $(".company").val();
+        Cont.content = $(".content").val();
+
+        if (Cont.name === "") {
+            swal('Thông báo', 'Vui lòng nhập họ tên', "warning");
+            return;
+        }
+        if (Cont.address === "") {
+            swal('Thông báo', 'Vui lòng nhập địa chỉ', "warning");
+            return;
+        }
+        if (Cont.phone === "") {
+            swal('Thông báo', 'Vui lòng nhập số điện thoại', "warning");
+            return;
+        }
+
+        if (Cont.content === "") {
+            swal('Thông báo', 'Vui lòng nhập nội dung', "warning");
+
+            return;
+        }
+        $('.btn-contact').prop('disabled', true);
+        $.when(
+            $.ajax({
+                url: "/Home/AddContact",
+                type: "GET",
+                data: Cont,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            }))
+           .done(function (data) {
+               if (data !== null) {
+
+
+                   swal('Thông báo', 'gửi liên hệ thành công ', "success");
+                   $('.btn-contact').prop('disabled', false);
+                   _ClearFormContact();
+                   return;
+
+               }
+
+
+           });
+
+    });
+});
+function _ClearFormContact() {
+    $(".name").val("");
+    $(".phone").val("");
+    $(".address").val("");
+    $(".company").val("");
+    $(".content").val("");
+}
